@@ -68,7 +68,7 @@ function LoginScreen({ onLogin }: { onLogin: (t: string) => void }) {
 }
 
 function Dashboard({ token, onLogout }: { token: string, onLogout: () => void }) {
-  const [activeTab, setActiveTab] = useState<'orders' | 'promos'>('orders')
+  const [activeTab, setActiveTab] = useState<'orders' | 'promos' | 'history'>('orders')
 
   return (
     <>
@@ -83,6 +83,13 @@ function Dashboard({ token, onLogout }: { token: string, onLogout: () => void })
             <ChefHat size={16} /> Pedidos
           </button>
           <button 
+            className={`btn ${activeTab === 'history' ? 'btn-prepare' : ''}`} 
+            style={{ marginRight: 8 }}
+            onClick={() => setActiveTab('history')}
+          >
+            <Clock size={16} /> Histórico
+          </button>
+          <button 
             className={`btn ${activeTab === 'promos' ? 'btn-prepare' : ''}`}
             style={{ marginRight: 8 }}
             onClick={() => setActiveTab('promos')}
@@ -95,11 +102,9 @@ function Dashboard({ token, onLogout }: { token: string, onLogout: () => void })
         </div>
       </nav>
 
-      {activeTab === 'orders' ? (
-        <OrdersKanban token={token} onLogout={onLogout} />
-      ) : (
-        <PromotionsManager token={token} />
-      )}
+      {activeTab === 'orders' && <OrdersKanban token={token} onLogout={onLogout} />}
+      {activeTab === 'history' && <OrdersHistory token={token} onLogout={onLogout} />}
+      {activeTab === 'promos' && <PromotionsManager token={token} />}
     </>
   )
 }
@@ -199,6 +204,67 @@ function OrdersKanban({ token, onLogout }: { token: string, onLogout: () => void
           ))}
         </div>
       </section>
+    </main>
+  )
+}
+
+function OrdersHistory({ token, onLogout }: { token: string, onLogout: () => void }) {
+  const [orders, setOrders] = useState<any[]>([])
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/owner/orders`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setOrders(response.data.filter((o: any) => o.status === 'DELIVERING' || o.status === 'COMPLETED' || o.status === 'CANCELLED'))
+    } catch (error: any) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        onLogout()
+      }
+    }
+  }
+
+  useEffect(() => {
+    fetchOrders()
+  }, [token])
+
+  return (
+    <main style={{ padding: 24, maxWidth: 1000, margin: '0 auto' }}>
+      <h2 style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <Clock size={24} /> Histórico de Pedidos Despachados
+      </h2>
+      <div style={{ background: 'var(--color-surface)', borderRadius: 12, border: '1px solid var(--color-border)', overflow: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <thead style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid var(--color-border)' }}>
+            <tr>
+              <th style={{ padding: 16 }}>Data</th>
+              <th style={{ padding: 16 }}>Mesa</th>
+              <th style={{ padding: 16 }}>Cliente</th>
+              <th style={{ padding: 16 }}>Itens</th>
+              <th style={{ padding: 16 }}>Total</th>
+              <th style={{ padding: 16 }}>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.length === 0 ? (
+              <tr><td colSpan={6} style={{ padding: 40, textAlign: 'center', color: 'var(--color-text-muted)' }}>Nenhum pedido no histórico.</td></tr>
+            ) : orders.map(order => (
+              <tr key={order.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                <td style={{ padding: 16, color: 'var(--color-text-muted)', fontSize: 14 }}>{new Date(order.createdAt).toLocaleString()}</td>
+                <td style={{ padding: 16, fontWeight: 700 }}>{order.tab.table.number}</td>
+                <td style={{ padding: 16 }}>{order.tab.user.name}</td>
+                <td style={{ padding: 16, fontSize: 14 }}>
+                  {order.items.map((i: any) => `${i.quantity}x ${i.product.name}`).join(', ')}
+                </td>
+                <td style={{ padding: 16, color: '#10B981', fontWeight: 700, whiteSpace: 'nowrap' }}>R$ {order.total.toFixed(2).replace('.', ',')}</td>
+                <td style={{ padding: 16 }}>
+                  <span style={{ background: 'rgba(255,255,255,0.1)', padding: '4px 8px', borderRadius: 4, fontSize: 12 }}>{order.status === 'DELIVERING' ? 'ENTREGUE' : order.status}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </main>
   )
 }
