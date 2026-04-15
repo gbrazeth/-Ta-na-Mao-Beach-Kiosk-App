@@ -46,8 +46,8 @@ export const TableSelectionScreen = ({ navigation, route }: Props) => {
            });
     }, [kioskId]);
 
-    const handleSelectTable = (tableId: string) => {
-        setKioskAndTable(kioskId, kioskName, tableId);
+    const handleSelectTable = (tableId: string, tableNumber: number) => {
+        setKioskAndTable(kioskId, kioskName, tableId, tableNumber);
         navigation.navigate('Menu');
     };
 
@@ -84,7 +84,7 @@ export const TableSelectionScreen = ({ navigation, route }: Props) => {
                                         { width: cardWidth },
                                         isAvailable ? styles.availableCard : styles.occupiedCard,
                                     ]}
-                                    onPress={() => isAvailable ? handleSelectTable(item.id) : undefined}
+                                    onPress={() => isAvailable ? handleSelectTable(item.id, item.number) : undefined}
                                     elevation={isAvailable ? 'sm' : 'none'}
                                 >
                                     <Text style={{ fontSize: 24, marginBottom: 4 }}>🏖️</Text>

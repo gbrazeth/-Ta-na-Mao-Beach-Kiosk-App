@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const TabSummaryScreen = ({ navigation }: Props) => {
-    const { tableId, kioskName, tabItems, products } = useAppStore();
+    const { tableId, tableNumber, kioskName, tabItems, products } = useAppStore();
 
     // Calcula o total geral consumido
     const tabTotal = tabItems.reduce((sum, order) => sum + order.total, 0);
@@ -28,7 +28,7 @@ export const TabSummaryScreen = ({ navigation }: Props) => {
 
             <View style={styles.content}>
                 <View style={styles.header}>
-                    <Text style={styles.headerLabel}>Mesa {tableId?.replace('t', '')}</Text>
+                    <Text style={styles.headerLabel}>Mesa {tableNumber}</Text>
                     <Text style={styles.headerCount}>{tabItems.length} Pedidos</Text>
                 </View>
 

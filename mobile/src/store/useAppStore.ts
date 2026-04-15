@@ -12,6 +12,7 @@ interface AppState {
     kioskId: string | null;
     kioskName: string | null;
     tableId: string | null;
+    tableNumber: number | null;
     cart: Record<string, number>;
     tabItems: Order[];
     products: any[];
@@ -22,7 +23,7 @@ interface AppState {
     setUser: (user: any, token: string) => void;
     logout: () => void;
     setProducts: (products: any[]) => void;
-    setKioskAndTable: (kioskId: string, kioskName: string, tableId: string) => void;
+    setKioskAndTable: (kioskId: string, kioskName: string, tableId: string, tableNumber: number) => void;
     updateCartQuantity: (productId: string, quantity: number) => void;
     clearCart: () => void;
     addOrderToTab: (orderId: string, total: number) => void;
@@ -34,6 +35,7 @@ export const useAppStore = create<AppState>((set) => ({
     kioskId: null,
     kioskName: null,
     tableId: null,
+    tableNumber: null,
     cart: {},
     tabItems: [],
     products: [],
@@ -41,9 +43,9 @@ export const useAppStore = create<AppState>((set) => ({
     token: null,
 
     setUser: (user, token) => set({ user, token }),
-    logout: () => set({ user: null, token: null, kioskId: null, kioskName: null, tableId: null, cart: {}, tabItems: [] }),
+    logout: () => set({ user: null, token: null, kioskId: null, kioskName: null, tableId: null, tableNumber: null, cart: {}, tabItems: [] }),
     setProducts: (products) => set({ products }),
-    setKioskAndTable: (kioskId, kioskName, tableId) => set({ kioskId, kioskName, tableId }),
+    setKioskAndTable: (kioskId, kioskName, tableId, tableNumber) => set({ kioskId, kioskName, tableId, tableNumber }),
 
     updateCartQuantity: (productId, quantity) => set((state) => {
         const newCart = { ...state.cart };
@@ -71,7 +73,7 @@ export const useAppStore = create<AppState>((set) => ({
         };
     }),
 
-    closeTab: () => set({ tabItems: [], kioskId: null, kioskName: null, tableId: null, cart: {} }),
+    closeTab: () => set({ tabItems: [], kioskId: null, kioskName: null, tableId: null, tableNumber: null, cart: {} }),
 
     updateOrderStatus: (orderId, status) => set((state) => ({
         tabItems: state.tabItems.map(order =>

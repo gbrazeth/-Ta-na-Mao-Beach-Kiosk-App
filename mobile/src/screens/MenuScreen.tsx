@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const MenuScreen = ({ navigation }: Props) => {
-    const { kioskId, kioskName, tableId, cart, updateCartQuantity, setProducts } = useAppStore();
+    const { kioskId, kioskName, tableId, tableNumber, cart, updateCartQuantity, setProducts } = useAppStore();
     const [categories, setCategories] = useState<any[]>([]);
     const [products, setLocalProducts] = useState<any[]>([]);
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -104,9 +104,11 @@ export const MenuScreen = ({ navigation }: Props) => {
                 title="Cardápio"
                 subtitle={kioskName || undefined}
                 rightElement={
-                    <View style={styles.tableBadge}>
-                        <Text style={styles.tableBadgeText}>Mesa {tableId?.replace('t', '')}</Text>
-                    </View>
+                    tableNumber ? (
+                        <View style={styles.tableBadge}>
+                            <Text style={styles.tableBadgeText}>Mesa {tableNumber}</Text>
+                        </View>
+                    ) : undefined
                 }
             />
 
