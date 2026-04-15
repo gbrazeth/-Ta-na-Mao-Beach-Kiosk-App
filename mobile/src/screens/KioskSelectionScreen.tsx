@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -57,6 +57,12 @@ export const KioskSelectionScreen = ({ navigation }: Props) => {
                                 onPress={() => navigation.navigate('TableSelection', { kioskId: item.id })}
                             >
                                 <View style={styles.cardContent}>
+                                    {item.name === 'Arena Zero 1' && (
+                                        <Image 
+                                            source={require('../../assets/Logo Arena Zero 1.jpg')} 
+                                            style={{ width: 60, height: 60, borderRadius: 30, marginRight: 16, borderWidth: 1, borderColor: '#E5E7EB' }} 
+                                        />
+                                    )}
                                     <View style={{ flex: 1 }}>
                                         <Text style={styles.kioskName}>{item.name}</Text>
                                         <Text style={styles.kioskLocation}>{item.description}</Text>
