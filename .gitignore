@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.local
+.DS_Store
+dist/
+.expo/
+web-build/
+*.log
+*.tsbuildinfo
+.metro-health-check*
+/ios
+/android

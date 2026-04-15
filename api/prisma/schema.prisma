@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String?  // Nullable para permitir Login Social
+  name      String?
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tabs      Tab[]
+}
+
+enum Role {
+  CUSTOMER
+  STAFF
+  ADMIN
+}
+
+model Kiosk {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  logoUrl     String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  tables      Table[]
+  categories  Category[]
+  promotions  Promotion[]
+}
+
+model Table {
+  id          String   @id @default(uuid())
+  kioskId     String
+  number      Int
+  status      TableStatus @default(AVAILABLE)
+  qrCode      String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  kiosk       Kiosk    @relation(fields: [kioskId], references: [id])
+  tabs        Tab[]
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  kioskId     String
+  name        String
+  icon        String?
+  sortOrder   Int       @default(0)
+  
+  kiosk       Kiosk     @relation(fields: [kioskId], references: [id])
+  products    Product[]
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  categoryId  String
+  name        String
+  description String?
+  price       Float
+  imageUrl    String?
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  category    Category  @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+}
+
+model Tab {
+  id          String    @id @default(uuid())
+  userId      String
+  tableId     String
+  status      TabStatus @default(OPEN)
+  openedAt    DateTime  @default(now())
+  closedAt    DateTime?
+  totalAmount Float     @default(0)
+
+  user        User      @relation(fields: [userId], references: [id])
+  table       Table     @relation(fields: [tableId], references: [id])
+  orders      Order[]
+}
+
+enum TabStatus {
+  OPEN
+  CLOSED
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  tabId       String
+  status      OrderStatus @default(AWAITING)
+  total       Float
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  tab         Tab         @relation(fields: [tabId], references: [id])
+  items       OrderItem[]
+}
+
+enum OrderStatus {
+  AWAITING
+  PREPARING
+  READY
+  DELIVERING
+  COMPLETED
+  CANCELED
+}
+
+model OrderItem {
+  id          String   @id @default(uuid())
+  orderId     String
+  productId   String
+  quantity    Int
+  unitPrice   Float
+  
+  order       Order    @relation(fields: [orderId], references: [id])
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+model Promotion {
+  id          String    @id @default(uuid())
+  kioskId     String?
+  title       String
+  description String?
+  icon        String    @default("🎉")
+  isActive    Boolean   @default(true)
+  screenTarget String   @default("all")  // "welcome", "kiosk_selection", "table_selection", "all"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  kiosk       Kiosk?    @relation(fields: [kioskId], references: [id])
+}
