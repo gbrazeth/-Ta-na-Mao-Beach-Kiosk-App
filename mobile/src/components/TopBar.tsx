@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
     },
     side: {
-        width: 40,
+        minWidth: 40,
     },
     backButton: {
         padding: 8,
