@@ -101,7 +101,14 @@ export const OrderStatusScreen = ({ navigation, route }: Props) => {
                         <Button
                             title="✅ Confirmar recebimento do pedido"
                             variant="success"
-                            onPress={() => updateOrderStatus(currentOrder.orderId, 'completed')}
+                            onPress={async () => {
+                                try {
+                                    await api.put(`/orders/${currentOrder.orderId}/status`, { status: 'completed' });
+                                    updateOrderStatus(currentOrder.orderId, 'completed');
+                                } catch (error) {
+                                    console.error("Erro ao confirmar entrega:", error);
+                                }
+                            }}
                         />
                     )}
                     <Button title="📋 Ver sua comanda" variant="secondary" onPress={() => navigation.navigate('TabSummary')} />
@@ -125,7 +132,14 @@ export const OrderStatusScreen = ({ navigation, route }: Props) => {
                         <Button 
                             title="Sim, recebi meu pedido!" 
                             variant="success" 
-                            onPress={() => updateOrderStatus(currentOrder.orderId, 'completed')} 
+                            onPress={async () => {
+                                try {
+                                    await api.put(`/orders/${currentOrder.orderId}/status`, { status: 'completed' });
+                                    updateOrderStatus(currentOrder.orderId, 'completed');
+                                } catch (error) {
+                                    console.error("Erro ao confirmar entrega:", error);
+                                }
+                            }}
                             style={{ width: '100%' }}
                         />
                     </Card>

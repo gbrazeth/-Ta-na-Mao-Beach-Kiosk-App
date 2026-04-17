@@ -258,14 +258,19 @@ app.get('/owner/orders', authMiddleware, async (req: AuthRequest, res: Response)
   }
 });
 
-// Atualizar status do pedido (AWAITING -> PREPARING -> READY)
+// Atualizar status do pedido (AWAITING -> PREPARING -> READY -> DELIVERING -> COMPLETED)
 app.put('/orders/:id/status', authMiddleware, async (req: AuthRequest, res: Response) => {
-  if (req.user.role !== 'ADMIN' && req.user.role !== 'STAFF') {
-    return res.status(403).json({ error: 'Acesso negado. Apenas funcionários.' });
-  }
-
   const { id } = req.params;
   const { status } = req.body;
+
+  if (req.user.role === 'CUSTOMER') {
+    // Clientes só podem confirmar recebimento (COMPLETED)
+    if (status !== 'COMPLETED' && status !== 'completed') {
+      return res.status(403).json({ error: 'Clientes só podem confirmar o recebimento (COMPLETED).' });
+    }
+  } else if (req.user.role !== 'ADMIN' && req.user.role !== 'STAFF') {
+    return res.status(403).json({ error: 'Acesso negado. Apenas funcionários.' });
+  }
 
   try {
     const order = await prisma.order.update({
