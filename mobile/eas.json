@@ -12,6 +12,9 @@
     "preview": {
       "distribution": "internal",
       "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://ta-na-mao-api.onrender.com"
+      },
       "android": {
         "buildType": "apk"
       }
