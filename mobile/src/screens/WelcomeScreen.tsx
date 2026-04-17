@@ -27,7 +27,7 @@ export const WelcomeScreen = ({ navigation }: Props) => {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/beach-hero.png')}
+                source={require('../../assets/beach-hero.jpg')}
                 style={styles.background}
                 resizeMode="cover"
             >
