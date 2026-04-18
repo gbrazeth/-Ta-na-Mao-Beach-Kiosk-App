@@ -103,8 +103,10 @@ export const OrderStatusScreen = ({ navigation, route }: Props) => {
                             variant="success"
                             onPress={async () => {
                                 try {
-                                    await api.put(`/orders/${currentOrder.orderId}/status`, { status: 'completed' });
+                                    // Atualização Otimista: Fechar o modal imediatamente!
                                     updateOrderStatus(currentOrder.orderId, 'completed');
+                                    // Prisma exige enum em Uppercase: 'COMPLETED'
+                                    await api.put(`/orders/${currentOrder.orderId}/status`, { status: 'COMPLETED' });
                                 } catch (error) {
                                     console.error("Erro ao confirmar entrega:", error);
                                 }
@@ -134,8 +136,10 @@ export const OrderStatusScreen = ({ navigation, route }: Props) => {
                             variant="success" 
                             onPress={async () => {
                                 try {
-                                    await api.put(`/orders/${currentOrder.orderId}/status`, { status: 'completed' });
+                                    // Atualização Otimista: Fechar o modal imediatamente!
                                     updateOrderStatus(currentOrder.orderId, 'completed');
+                                    // Prisma exige enum em Uppercase: 'COMPLETED'
+                                    await api.put(`/orders/${currentOrder.orderId}/status`, { status: 'COMPLETED' });
                                 } catch (error) {
                                     console.error("Erro ao confirmar entrega:", error);
                                 }
