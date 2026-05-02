@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from './types';
 import { View, Text } from 'react-native';
+import { GlobalDeliveryModal } from '../components/GlobalDeliveryModal';
 import { WelcomeScreen } from '../screens/WelcomeScreen';
 import { LoginScreen } from '../screens/LoginScreen';
 import { RegistrationScreen } from '../screens/RegistrationScreen';
@@ -26,21 +27,24 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const AppNavigator = () => {
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Welcome" component={WelcomeScreen} />
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="Registration" component={RegistrationScreen} />
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="KioskSelection" component={KioskSelectionScreen} />
-                <Stack.Screen name="TableSelection" component={TableSelectionScreen} />
-                <Stack.Screen name="Menu" component={MenuScreen} />
-                <Stack.Screen name="OrderReview" component={OrderReviewScreen} />
-                <Stack.Screen name="OrderStatus" component={OrderStatusScreen} />
-                <Stack.Screen name="TabSummary" component={TabSummaryScreen} />
-                <Stack.Screen name="Payment" component={PaymentScreen} />
-                <Stack.Screen name="PaymentConfirmation" component={PaymentConfirmationScreen} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <View style={{ flex: 1 }}>
+            <NavigationContainer>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="Welcome" component={WelcomeScreen} />
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Registration" component={RegistrationScreen} />
+                    <Stack.Screen name="Home" component={HomeScreen} />
+                    <Stack.Screen name="KioskSelection" component={KioskSelectionScreen} />
+                    <Stack.Screen name="TableSelection" component={TableSelectionScreen} />
+                    <Stack.Screen name="Menu" component={MenuScreen} />
+                    <Stack.Screen name="OrderReview" component={OrderReviewScreen} />
+                    <Stack.Screen name="OrderStatus" component={OrderStatusScreen} />
+                    <Stack.Screen name="TabSummary" component={TabSummaryScreen} />
+                    <Stack.Screen name="Payment" component={PaymentScreen} />
+                    <Stack.Screen name="PaymentConfirmation" component={PaymentConfirmationScreen} />
+                </Stack.Navigator>
+            </NavigationContainer>
+            <GlobalDeliveryModal />
+        </View>
     );
 };

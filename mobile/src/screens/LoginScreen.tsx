@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     subtitle: { fontSize: 14, color: '#6B7280' },
     formGroup: { marginBottom: 20 },
     label: { fontSize: 14, fontWeight: '600', color: '#374151', marginBottom: 8 },
-    input: { borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 8, paddingHorizontal: 16, height: 50, fontSize: 16, backgroundColor: '#F9FAFB' },
+    input: { borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 8, paddingHorizontal: 16, height: 50, fontSize: 16, backgroundColor: '#F9FAFB', color: '#111827' },
     primaryButton: { backgroundColor: '#1E3A8A', borderRadius: 8, height: 50, alignItems: 'center', justifyContent: 'center', marginTop: 12, marginBottom: 20 },
     primaryButtonText: { color: '#FFF', fontSize: 16, fontWeight: '700' },
     registerLink: { color: '#1E3A8A', textAlign: 'center', fontWeight: '600', fontSize: 14 },

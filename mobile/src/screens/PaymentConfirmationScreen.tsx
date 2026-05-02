@@ -6,16 +6,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../services/api';
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'PaymentConfirmation'>;
 };
 
 export const PaymentConfirmationScreen = ({ navigation }: Props) => {
-    const { closeTab } = useAppStore();
+    const { closeTab, tableId } = useAppStore();
 
     // Gerar código de voucher decorativo
     const voucherCode = 'PRAIA' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    // Fechar a mesa no backend assim que chegar nesta tela de sucesso
+    React.useEffect(() => {
+        if (tableId) {
+            api.post('/tabs/close', { tableId })
+               .catch(err => console.error("Erro ao liberar a mesa:", err));
+        }
+    }, [tableId]);
 
     const handleFinish = () => {
         closeTab();

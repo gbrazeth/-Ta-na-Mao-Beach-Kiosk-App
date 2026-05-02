@@ -118,37 +118,6 @@ export const OrderStatusScreen = ({ navigation, route }: Props) => {
                 </View>
             </View>
 
-            {/* Modal de confirmação de entrega do garçom */}
-            <Modal
-                transparent={true}
-                visible={isDelivering}
-                animationType="fade"
-            >
-                <View style={styles.modalOverlay}>
-                    <Card style={styles.modalCard}>
-                        <View style={styles.modalIconCircle}>
-                            <Text style={{ fontSize: 40 }}>🏖️</Text>
-                        </View>
-                        <Text style={styles.modalTitle}>Seu pedido chegou?</Text>
-                        <Text style={styles.modalDesc}>O garçom já saiu com seu pedido e deveria estar chegando à sua mesa. Por favor, confirme o recebimento.</Text>
-                        <Button 
-                            title="Sim, recebi meu pedido!" 
-                            variant="success" 
-                            onPress={async () => {
-                                try {
-                                    // Atualização Otimista: Fechar o modal imediatamente!
-                                    updateOrderStatus(currentOrder.orderId, 'completed');
-                                    // Prisma exige enum em Uppercase: 'COMPLETED'
-                                    await api.put(`/orders/${currentOrder.orderId}/status`, { status: 'COMPLETED' });
-                                } catch (error) {
-                                    console.error("Erro ao confirmar entrega:", error);
-                                }
-                            }}
-                            style={{ width: '100%' }}
-                        />
-                    </Card>
-                </View>
-            </Modal>
         </SafeAreaView>
     );
 };

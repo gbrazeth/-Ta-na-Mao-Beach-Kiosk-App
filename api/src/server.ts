@@ -233,6 +233,37 @@ app.get('/orders/:id', authMiddleware, async (req: AuthRequest, res: Response) =
   }
 });
 
+// 5. Rota: Fechar Comanda e Liberar a Mesa
+app.post('/tabs/close', authMiddleware, async (req: AuthRequest, res: Response) => {
+  const { tableId } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const tab = await prisma.tab.findFirst({ 
+      where: { userId, tableId, status: 'OPEN' } 
+    });
+    
+    if (!tab) return res.status(404).json({ error: 'Nenhuma comanda aberta encontrada para esta mesa.' });
+
+    // Fecha a comanda
+    await prisma.tab.update({
+      where: { id: tab.id },
+      data: { status: 'CLOSED', closedAt: new Date() }
+    });
+
+    // Libera a mesa
+    await prisma.table.update({
+      where: { id: tab.tableId },
+      data: { status: 'AVAILABLE' }
+    });
+
+    res.json({ message: 'Conta fechada e mesa liberada com sucesso.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao fechar comanda.' });
+  }
+});
+
 // ==========================================
 // 👔 OWNER ROUTES (Dashboard)
 // ==========================================

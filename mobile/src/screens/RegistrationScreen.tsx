@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     subtitle: { fontSize: 16, color: '#374151', marginBottom: 24, fontWeight: '500' },
     formGroup: { marginBottom: 20 },
     label: { fontSize: 14, fontWeight: '600', color: '#111827', marginBottom: 8 },
-    input: { borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 8, paddingHorizontal: 16, height: 50, fontSize: 16, backgroundColor: '#F9FAFB' },
+    input: { borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 8, paddingHorizontal: 16, height: 50, fontSize: 16, backgroundColor: '#F9FAFB', color: '#111827' },
     termsText: { fontSize: 12, color: '#6B7280', textAlign: 'center', marginBottom: 24, paddingHorizontal: 16 },
     primaryButton: { backgroundColor: '#1E3A8A', borderRadius: 8, height: 50, alignItems: 'center', justifyContent: 'center', marginBottom: 20 },
     primaryButtonText: { color: '#FFF', fontSize: 16, fontWeight: '700' },
