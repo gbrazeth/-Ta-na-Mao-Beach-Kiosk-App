@@ -99,7 +99,7 @@ export const OrderStatusScreen = ({ navigation, route }: Props) => {
                     {/* Botão inline de confirmação de entrega */}
                     {isDelivering && (
                         <Button
-                            title="✅ Confirmar recebimento do pedido"
+                            title="✅ Confirmar Entrega"
                             variant="success"
                             onPress={async () => {
                                 try {
